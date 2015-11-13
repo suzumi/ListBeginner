@@ -94,11 +94,19 @@ object ListBeginner {
    * res0: Boolean = true
    */
   def isPalindrome(list: List[Int]): Boolean = {
-    def loop(list: List[Int], left: Int) = list match {
+    def loop(list: List[Int], reverseList: List[Int]): Boolean = list match {
       case Nil => false
       case x :: Nil => true
-      case x :: xs
+      case x :: xs => reverseList match {
+        case Nil => false
+        case y :: Nil => true
+        case y :: ys => {
+          if (x == y) loop(xs, ys)
+          else false
+        }
+      }
     }
+    loop(list, reverse(list))
   }
 
   /**
@@ -107,7 +115,13 @@ object ListBeginner {
    * res0: List[Symbol] = List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd)
    */
   def duplicate(list: List[Symbol]): List[Symbol] = {
-    ???
+    @tailrec
+    def loop(list: List[Symbol], doubleList: List[Symbol]): List[Symbol] = list match {
+      case Nil => Nil
+      case x :: Nil => doubleList :+x :+x
+      case x :: xs => loop(xs, doubleList :+ x :+ x)
+    }
+    loop(list, Nil)
   }
 
   /**
@@ -115,8 +129,17 @@ object ListBeginner {
    * scala> split(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
    * res0: (List[Symbol], List[Symbol]) = (List('a, 'b, 'c),List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
    */
-  def split() = {
-    ???
+  def split(idx: Int, list: List[Symbol]): (List[Symbol], List[Symbol]) = {
+    @tailrec
+    def loop(idx:Int, list: List[Symbol], pos: Int, splitList: List[Symbol]): (List[Symbol], List[Symbol]) = list match {
+      case Nil => (Nil, Nil)
+      case x :: Nil => (List(x), Nil)
+      case x :: xs => {
+        if (idx == pos) (splitList :+ x, xs)
+        else loop(idx, xs, pos + 1, splitList :+ x)
+      }
+    }
+    loop(idx, list, 1, Nil)
   }
 
   /**
@@ -125,8 +148,17 @@ object ListBeginner {
    * scala> removeAt(1, List('a, 'b, 'c, 'd))
    * res0: (List[Symbol], Symbol) = (List('a, 'c, 'd),'b)
    */
-  def removeAt() = {
-    ???
+  def removeAt(idx: Int, list: List[Symbol]): (List[Symbol], Symbol) = {
+    @tailrec
+    def loop(idx: Int, list: List[Symbol], removedList: List[Symbol], pos: Int): (List[Symbol], Symbol) = list match {
+      case Nil => (Nil, 'a)
+      case x :: Nil => (removedList, x)
+      case x :: xs => {
+        if (idx == pos) (removedList ::: xs, x)
+        else loop(idx, xs, removedList :+ x, pos + 1)
+      }
+    }
+    loop(idx, list, Nil, 0)
   }
 
   /**
@@ -135,8 +167,17 @@ object ListBeginner {
    * scala> insertAt('new, 1, List('a, 'b, 'c, 'd))
    * res0: List[Symbol] = List('a, 'new, 'b, 'c, 'd)
    */
-  def insertAt() = {
-    ???
+  def insertAt(newSymbol: Symbol, idx: Int, list: List[Symbol]): List[Symbol] = {
+    @tailrec
+    def loop(newSymbol: Symbol, idx: Int, list: List[Symbol], pos: Int, newList: List[Symbol]): List[Symbol] = list match {
+      case Nil => Nil
+      case x :: Nil => newList :+ x
+      case x :: xs => {
+        if (idx == pos) (newList :+ newSymbol :+ x) ::: xs
+        else loop(newSymbol, idx, xs, pos + 1, newList :+ x)
+      }
+    }
+    loop(newSymbol, idx, list, 0, Nil)
   }
 
   /**
@@ -144,8 +185,16 @@ object ListBeginner {
    * scala> range(4, 9)
    * res0: List[Int] = List(4, 5, 6, 7, 8, 9)
    */
-  def range() = {
-    ???
+  def range(from: Int, to: Int): List[Int] = {
+    @tailrec
+    def loop(from: Int, width: Int, idx: Int, seqList: List[Int]): List[Int] = width match {
+      case 0 => seqList :+ from
+      case _ => {
+        if (width < idx) (seqList :+ from + idx) :+ (from + idx + 1) :+ (from + width + idx)
+        else loop(from, width - 1, idx + 1, seqList :+ from + idx)
+      }
+    }
+    loop(from, to - from, 0, Nil)
   }
 
 }
