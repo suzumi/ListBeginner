@@ -94,6 +94,7 @@ object ListBeginner {
    * res0: Boolean = true
    */
   def isPalindrome(list: List[Int]): Boolean = {
+    @tailrec
     def loop(list: List[Int], reverseList: List[Int]): Boolean = list match {
       case Nil => false
       case x :: Nil => true
