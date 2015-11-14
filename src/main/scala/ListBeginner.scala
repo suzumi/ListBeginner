@@ -13,9 +13,9 @@ object ListBeginner {
    *
    */
   @tailrec
-  def last(list: List[Int]): Int = {
+  def last[A](list: List[A]): A = {
     list match {
-      case Nil => 0
+      case Nil => throw new IllegalArgumentException
       case x :: Nil => x
       case x :: xs => last(xs)
     }
@@ -27,9 +27,9 @@ object ListBeginner {
    * res0: Int = 5
    */
   @tailrec
-  def penultimate(list: List[Int]): Int = {
+  def penultimate[A](list: List[A]): A = {
     list match {
-      case Nil => 0
+      case Nil => throw new IllegalArgumentException
       case x :: Nil => x
       case x :: xs => {
         if (xs.size == 1) x
@@ -44,10 +44,10 @@ object ListBeginner {
    * scala> nth(2, List(1, 1, 2, 3, 5, 8))
    * res0: Int = 2
    */
-  def nth(idx: Int, list: List[Int]): Int = {
+  def nth[A](idx: Int, list: List[A]): A = {
     @tailrec
-    def loop(idx: Int, list: List[Int], acc: Int): Int = list match {
-      case Nil => 0
+    def loop[A](idx: Int, list: List[A], acc: Int): A = list match {
+      case Nil => throw new IllegalArgumentException
       case x :: Nil => x
       case x :: xs => {
         if (idx == acc) x
@@ -62,9 +62,9 @@ object ListBeginner {
    * scala> length(List(1, 1, 2, 3, 5, 8))
    * res0: Int = 6
    */
-  def length(list: List[Int]): BigInt = {
+  def length[A](list: List[A]): BigInt = {
     @tailrec
-    def loop(list: List[Int], acc: BigInt): BigInt = list match {
+    def loop[A](list: List[A], acc: BigInt): BigInt = list match {
       case Nil => acc
       case x :: Nil => acc + 1
       case x :: xs => loop(xs, acc + 1)
@@ -77,9 +77,9 @@ object ListBeginner {
    * scala> reverse(List(1, 1, 2, 3, 5, 8))
    * res0: List[Int] = List(8, 5, 3, 2, 1, 1)
    */
-  def reverse(list: List[Int]): List[Int] = {
+  def reverse[A](list: List[A]): List[A] = {
     @tailrec
-    def loop(list: List[Int], acc: List[Int]): List[Int] = list match {
+    def loop[A](list: List[A], acc: List[A]): List[A] = list match {
       case Nil => acc
       case x :: Nil => x :: acc
       case x :: xs => loop(xs, x :: acc)
@@ -93,9 +93,9 @@ object ListBeginner {
    * scala> isPalindrome(List(1, 2, 3, 2, 1))
    * res0: Boolean = true
    */
-  def isPalindrome(list: List[Int]): Boolean = {
+  def isPalindrome[A](list: List[A]): Boolean = {
     @tailrec
-    def loop(list: List[Int], reverseList: List[Int]): Boolean = list match {
+    def loop[A](list: List[A], reverseList: List[A]): Boolean = list match {
       case Nil => false
       case x :: Nil => true
       case x :: xs => reverseList match {
@@ -115,9 +115,9 @@ object ListBeginner {
    * scala> duplicate(List('a, 'b, 'c, 'c, 'd))
    * res0: List[Symbol] = List('a, 'a, 'b, 'b, 'c, 'c, 'c, 'c, 'd, 'd)
    */
-  def duplicate(list: List[Symbol]): List[Symbol] = {
+  def duplicate[A](list: List[A]): List[A] = {
     @tailrec
-    def loop(list: List[Symbol], doubleList: List[Symbol]): List[Symbol] = list match {
+    def loop[A](list: List[A], doubleList: List[A]): List[A] = list match {
       case Nil => Nil
       case x :: Nil => doubleList :+x :+x
       case x :: xs => loop(xs, doubleList :+ x :+ x)
@@ -130,9 +130,9 @@ object ListBeginner {
    * scala> split(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
    * res0: (List[Symbol], List[Symbol]) = (List('a, 'b, 'c),List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
    */
-  def split(idx: Int, list: List[Symbol]): (List[Symbol], List[Symbol]) = {
+  def split[A](idx: Int, list: List[A]): (List[A], List[A]) = {
     @tailrec
-    def loop(idx:Int, list: List[Symbol], pos: Int, splitList: List[Symbol]): (List[Symbol], List[Symbol]) = list match {
+    def loop[A](idx:Int, list: List[A], pos: Int, splitList: List[A]): (List[A], List[A]) = list match {
       case Nil => (Nil, Nil)
       case x :: Nil => (List(x), Nil)
       case x :: xs => {
@@ -149,10 +149,10 @@ object ListBeginner {
    * scala> removeAt(1, List('a, 'b, 'c, 'd))
    * res0: (List[Symbol], Symbol) = (List('a, 'c, 'd),'b)
    */
-  def removeAt(idx: Int, list: List[Symbol]): (List[Symbol], Symbol) = {
+  def removeAt[A](idx: Int, list: List[A]): (List[A], A) = {
     @tailrec
-    def loop(idx: Int, list: List[Symbol], removedList: List[Symbol], pos: Int): (List[Symbol], Symbol) = list match {
-      case Nil => (Nil, 'a)
+    def loop[A](idx: Int, list: List[A], removedList: List[A], pos: Int): (List[A], A) = list match {
+      case Nil => (Nil, None.asInstanceOf[A])
       case x :: Nil => (removedList, x)
       case x :: xs => {
         if (idx == pos) (removedList ::: xs, x)
@@ -168,11 +168,11 @@ object ListBeginner {
    * scala> insertAt('new, 1, List('a, 'b, 'c, 'd))
    * res0: List[Symbol] = List('a, 'new, 'b, 'c, 'd)
    */
-  def insertAt(newSymbol: Symbol, idx: Int, list: List[Symbol]): List[Symbol] = {
+  def insertAt[A](newSymbol: A, idx: Int, list: List[A]): List[A] = {
     @tailrec
-    def loop(newSymbol: Symbol, idx: Int, list: List[Symbol], pos: Int, newList: List[Symbol]): List[Symbol] = list match {
+    def loop[A](newSymbol: A, idx: Int, list: List[A], pos: Int, newList: List[A]): List[A] = list match {
       case Nil => Nil
-      case x :: Nil => newList :+ x
+      case x :: Nil => newList :+ newSymbol :+ x
       case x :: xs => {
         if (idx == pos) (newList :+ newSymbol :+ x) ::: xs
         else loop(newSymbol, idx, xs, pos + 1, newList :+ x)
