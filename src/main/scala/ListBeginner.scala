@@ -31,10 +31,8 @@ object ListBeginner {
     list match {
       case Nil => throw new IllegalArgumentException
       case x :: Nil => x
-      case x :: xs => {
-        if (xs.size == 1) x
-        else penultimate(xs)
-      }
+      case x :: y :: Nil => x
+      case x :: xs => penultimate(xs)
     }
   }
 
@@ -62,9 +60,9 @@ object ListBeginner {
    * scala> length(List(1, 1, 2, 3, 5, 8))
    * res0: Int = 6
    */
-  def length[A](list: List[A]): BigInt = {
+  def length[A](list: List[A]): Int = {
     @tailrec
-    def loop[A](list: List[A], acc: BigInt): BigInt = list match {
+    def loop[A](list: List[A], acc: Int): Int = list match {
       case Nil => acc
       case x :: Nil => acc + 1
       case x :: xs => loop(xs, acc + 1)
